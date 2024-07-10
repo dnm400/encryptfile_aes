@@ -258,8 +258,9 @@ int main(){ //define types
     getline(cin, plainin);
     plainin.erase(remove_if(plainin.begin(), plainin.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), plainin.end());
     string ciphertext = crypt(plainin, keyin, CTR);
-    cout << " is the ciphertext.";
-
+    ofstream file("encrypted.txt");
+    file << ciphertext;
+    file.close();
     }
 
     else if (i == "d"){
@@ -268,7 +269,9 @@ int main(){ //define types
     getline(cin, cipherin);
     cipherin.erase(remove_if(cipherin.begin(), cipherin.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), cipherin.end());
     string plaintext = crypt(cipherin, keyin, CTR);
-    cout << " is the plaintext.";
+    ofstream file("decrypted.txt");
+    file << plaintext;
+    file.close();
     }
 
     else 
