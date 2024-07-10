@@ -291,6 +291,10 @@ void encrypt(string plainin, string keyin, uint8_t CTR[16]){
 
 }
 
+void decrypt(string cipherin, string keyin, uint8_t CTR[16]){
+
+}
+
 int main(){ //define types
 
     uint8_t IV[12]= {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb}; // 96-bit IV
@@ -310,6 +314,14 @@ int main(){ //define types
     getline(cin, plainin);
     plainin.erase(remove_if(plainin.begin(), plainin.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), plainin.end());
     encrypt(plainin, keyin, CTR);
+
+    // add "if pressed c" command
+    cout << "Cipher Text? " <<endl;
+    string cipherin;
+    getline(cin, cipherin);
+    cipherin.erase(remove_if(cipherin.begin(), cipherin.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), cipherin.end());
+    decrypt(cipherin, keyin, CTR);
+
 
     return 0;
 
