@@ -228,31 +228,12 @@ void incrementCTR(uint8_t CTR[16]) {
     }
 }
 
+void encrypt(string plainin, string keyin, uint8_t CTR[16]){
 
-int main(){ //define types
-
-    uint8_t IV[12]= {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb}; // 96-bit IV
-    uint8_t counter32[4] = {0x00, 0x00, 0x00, 0x00}; //remaining 32-bit
-    uint8_t CTR[sizeof(IV) + sizeof(counter32)]; //16 byte
-    memcpy(CTR, IV, sizeof(IV));
-    memcpy(CTR + sizeof(IV), counter32, sizeof(counter32));
     vector<vector<uint8_t>> key(4, vector<uint8_t>(4));
 
-    cout << "Plain Text? " <<endl;
-    string plainin;
-    getline(cin, plainin);
-    plainin.erase(remove_if(plainin.begin(), plainin.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), plainin.end());
-
-    size_t numBlocks = plainin.length() / 32; //blocks for plaintext
-
-
-    cout << "Key? " << endl;
-    string keyin;
-    getline(cin, keyin);
-    keyin.erase(remove_if(keyin.begin(), keyin.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), keyin.end());
-
-
- for (size_t m = 0; m < numBlocks; ++m) {
+    size_t numBlocks = plainin.length() / 32;
+    for (size_t m = 0; m < numBlocks; ++m) {
     string block = plainin.substr(m * 32, 32); // plaintext shouldnt be written seperate
     vector<vector<uint8_t>> plaintext(4, vector<uint8_t>(4));
     strtomat(block, plaintext);
@@ -307,6 +288,29 @@ int main(){ //define types
     incrementCTR(CTR);
     }
     cout << " is the ciphertext.";
+
+}
+
+int main(){ //define types
+
+    uint8_t IV[12]= {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb}; // 96-bit IV
+    uint8_t counter32[4] = {0x00, 0x00, 0x00, 0x00}; //remaining 32-bit
+    uint8_t CTR[sizeof(IV) + sizeof(counter32)]; //16 byte
+    memcpy(CTR, IV, sizeof(IV));
+    memcpy(CTR + sizeof(IV), counter32, sizeof(counter32));
+
+    cout << "Key? " << endl;
+    string keyin;
+    getline(cin, keyin);
+    keyin.erase(remove_if(keyin.begin(), keyin.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), keyin.end());
+    
+    // add "if pressed p" command 
+    cout << "Plain Text? " <<endl;
+    string plainin;
+    getline(cin, plainin);
+    plainin.erase(remove_if(plainin.begin(), plainin.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), plainin.end());
+    encrypt(plainin, keyin, CTR);
+
     return 0;
 
 }
