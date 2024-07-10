@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <cstring>
 #include <cctype> // for isspace
+#include <fstream> //for file operations
 
 
 #define Nr 10 //number of rounds
@@ -90,20 +91,20 @@ void ShiftRows(vector<vector<uint8_t>>& newst) { //vector of vectors provides ma
 void invShiftRows(vector<vector<uint8_t>>& newst) { //vector of vectors provides matrix
     //second row, one right shift
     vector<vector<uint8_t>> temp = newst;
-    newst[1][0] = temp[1][3];
-    newst[1][1] = temp[1][0];
-    newst[1][2] = temp[1][1];
-    newst[1][3] = temp[1][2];
+    newst[0][1] = temp[3][1];
+    newst[1][1] = temp[0][1];
+    newst[2][1] = temp[1][1];
+    newst[3][1] = temp[2][1];
     //third row, two shift
-    newst[2][0] = temp[2][2];
-    newst[2][1] = temp[2][3];
-    newst[2][2] = temp[2][0];
-    newst[2][3] = temp[2][1];
+    newst[0][2] = temp[2][2];
+    newst[1][2] = temp[3][2];
+    newst[2][2] = temp[0][2];
+    newst[3][2] = temp[1][2];
     //fourth row, three shift
-    newst[3][0] = temp[3][1];
-    newst[3][1] = temp[3][2];
-    newst[3][2] = temp[3][3];
-    newst[3][3] = temp[3][0];
+    newst[0][3] = temp[1][3];
+    newst[1][3] = temp[2][3];
+    newst[2][3] = temp[3][3];
+    newst[3][3] = temp[0][3];
 }
 
 
