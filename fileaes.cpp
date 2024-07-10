@@ -174,9 +174,10 @@ void incrementCTR(uint8_t CTR[16]) {
 }
 
 
-void crypt(string textin, string keyin, uint8_t CTR[16]){
+string crypt(string textin, string keyin, uint8_t CTR[16]){
 
     vector<vector<uint8_t>> key(4, vector<uint8_t>(4));
+    string finaltext;
 
     size_t numBlocks = textin.length() / 32;
     for (size_t m = 0; m < numBlocks; ++m) {
@@ -229,10 +230,10 @@ void crypt(string textin, string keyin, uint8_t CTR[16]){
         }
    
     string cipherorplaintext = mattostr(textt);
-    cout << cipherorplaintext ;
-
+    finaltext.append(cipherorplaintext);
     incrementCTR(CTR);
     }
+    return finaltext;
 
 }
 
@@ -256,7 +257,7 @@ int main(){ //define types
     string plainin;
     getline(cin, plainin);
     plainin.erase(remove_if(plainin.begin(), plainin.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), plainin.end());
-    crypt(plainin, keyin, CTR);
+    string ciphertext = crypt(plainin, keyin, CTR);
     cout << " is the ciphertext.";
 
     }
@@ -266,7 +267,7 @@ int main(){ //define types
     string cipherin;
     getline(cin, cipherin);
     cipherin.erase(remove_if(cipherin.begin(), cipherin.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), cipherin.end());
-    crypt(cipherin, keyin, CTR);
+    string plaintext = crypt(cipherin, keyin, CTR);
     cout << " is the plaintext.";
     }
 
