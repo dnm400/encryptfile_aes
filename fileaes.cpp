@@ -336,7 +336,7 @@ void decrypt(string cipherin, string keyin, uint8_t CTR[16]){
     for(int i = 1; i < Nr; ++i){ //Number of rounds Nr
         invShiftRows(CTRmat);
         invSubBytes(CTRmat);
-        //ADD INV UPDATEKEY!!!!
+        UpdateDecipher(key, Rcon[Nr-i]);
         AddRoundKey(CTRmat, key);
         vector<uint8_t> vec0(4), vec1(4), vec2(4), vec3(4);
         for(int j = 0; j < 4; ++j){ 
@@ -357,8 +357,9 @@ void decrypt(string cipherin, string keyin, uint8_t CTR[16]){
             CTRmat[3][j] = vec3[j];
         }
     }
+
     //last round no invmixcolumns
-    //AGAIN INV UPDATE KEY
+    UpdateDecipher(key, Rcon[0]);   
     invShiftRows(CTRmat);
     invSubBytes(CTRmat);
     AddRoundKey(CTRmat, key);
