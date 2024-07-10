@@ -116,6 +116,14 @@ void RotWord(vector<uint8_t>& rotw){
     rotw[3] = temp;
 }
 
+void invRotWord(vector<uint8_t>& rotw){
+    uint8_t temp = rotw[3];
+    rotw[3] = rotw[2];
+    rotw[2] = rotw[1];
+    rotw[1] = rotw[0];
+    rotw[0] = temp;
+}
+
 uint8_t GalF(uint8_t var1, uint8_t var2) { //ChatGPT Version
     uint8_t result = 0x00;
     for (int i = 0; i < 8; ++i) {
@@ -228,7 +236,28 @@ void incrementCTR(uint8_t CTR[16]) {
     }
 }
 
-void encrypt(string plainin, string keyin, uint8_t CTR[16]){
+void UpdateDecipher(vector<vector<uint8_t>>& updatedkey, uint8_t Rcont){
+    vector<vector<uint8_t>> keyschedule = updatedkey;
+    vector<uint8_t> veccolumn(4);
+    for(int i = 0; i < 4; ++i){ 
+        veccolumn[i] = keyschedule[0][i];
+    }
+     for(int i = 0; i < 4; ++i){    //Same because of XOR operations
+        updatedkey[0][i] = keyschedule[0][i] ^ veccolumn[i];
+        updatedkey[1][i] = updatedkey[0][i] ^ keyschedule[1][i];
+        updatedkey[2][i] = updatedkey[1][i] ^ keyschedule[2][i];
+        updatedkey[3][i] = updatedkey[2][i] ^ keyschedule[3][i];
+    }
+    veccolumn[0] ^= Rcont;
+    for(int i = 0; i < 4; ++i){
+        veccolumn[i] = inversesbox[veccolumn[i]];
+        }
+    invRotWord(veccolumn);
+
+}
+
+void encrypt(string plainin, string 
+keyin, uint8_t CTR[16]){
 
     vector<vector<uint8_t>> key(4, vector<uint8_t>(4));
 
