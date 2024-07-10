@@ -254,7 +254,9 @@ int main(){ //define types
 
     if (i == "e"){
     cout << "Plain Text? " <<endl;
-    ifstream filep("plaintext.txt"); //CHANGE (TAKE IT as input and choose directory maybe)
+    string plin;
+    cin >> plin;
+    ifstream filep(plin);
     string plainin;
     filep >> plainin;
     plainin.erase(remove_if(plainin.begin(), plainin.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), plainin.end());
@@ -267,7 +269,9 @@ int main(){ //define types
 
     else if (i == "d"){
     cout << "Cipher Text? " <<endl;
-    ifstream filec("ciphertext.txt"); //CHANGE (TAKE IT as input and choose directory maybe)
+    string cipin;
+    cin >> cipin;
+    ifstream filec(cipin);
     string cipherin;
     filec >> cipherin;
     cipherin.erase(remove_if(cipherin.begin(), cipherin.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), cipherin.end());
