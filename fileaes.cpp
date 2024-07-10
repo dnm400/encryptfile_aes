@@ -387,26 +387,32 @@ int main(){ //define types
     uint8_t CTR[sizeof(IV) + sizeof(counter32)]; //16 byte
     memcpy(CTR, IV, sizeof(IV));
     memcpy(CTR + sizeof(IV), counter32, sizeof(counter32));
-
     cout << "Key? " << endl;
     string keyin;
     getline(cin, keyin);
     keyin.erase(remove_if(keyin.begin(), keyin.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), keyin.end());
-    
-    // add "if pressed p" command 
+    cout << "Please enter e if you want to encrypt, and d if you want do decrypt:" << endl;
+    string i;
+    getline(cin, i);
+
+    if (i == "e"){
     cout << "Plain Text? " <<endl;
     string plainin;
     getline(cin, plainin);
     plainin.erase(remove_if(plainin.begin(), plainin.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), plainin.end());
     encrypt(plainin, keyin, CTR);
+    }
 
-    // add "if pressed c" command
+    else if (i == "d"){
     cout << "Cipher Text? " <<endl;
     string cipherin;
     getline(cin, cipherin);
     cipherin.erase(remove_if(cipherin.begin(), cipherin.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), cipherin.end());
     decrypt(cipherin, keyin, CTR);
+    }
 
+    else 
+    cout << "ERROR";
 
     return 0;
 
