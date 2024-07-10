@@ -254,24 +254,28 @@ int main(){ //define types
 
     if (i == "e"){
     cout << "Plain Text? " <<endl;
+    ifstream filep("plaintext.txt"); //CHANGE (TAKE IT as input and choose directory maybe)
     string plainin;
-    getline(cin, plainin);
+    filep >> plainin;
     plainin.erase(remove_if(plainin.begin(), plainin.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), plainin.end());
     string ciphertext = crypt(plainin, keyin, CTR);
     ofstream file("encrypted.txt");
     file << ciphertext;
     file.close();
+    filep.close();
     }
 
     else if (i == "d"){
     cout << "Cipher Text? " <<endl;
+    ifstream filec("ciphertext.txt"); //CHANGE (TAKE IT as input and choose directory maybe)
     string cipherin;
-    getline(cin, cipherin);
+    filec >> cipherin;
     cipherin.erase(remove_if(cipherin.begin(), cipherin.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), cipherin.end());
     string plaintext = crypt(cipherin, keyin, CTR);
     ofstream file("decrypted.txt");
     file << plaintext;
     file.close();
+    filec.close();
     }
 
     else 
