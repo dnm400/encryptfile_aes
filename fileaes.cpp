@@ -234,7 +234,7 @@ void encrypt(string plainin, string keyin, uint8_t CTR[16]){
 
     size_t numBlocks = plainin.length() / 32;
     for (size_t m = 0; m < numBlocks; ++m) {
-    string block = plainin.substr(m * 32, 32); // plaintext shouldnt be written seperate
+    string block = plainin.substr(m * 32, 32); 
     vector<vector<uint8_t>> plaintext(4, vector<uint8_t>(4));
     strtomat(block, plaintext);
     vector<vector<uint8_t>> CTRmat(4, vector<uint8_t>(4)); //matrix of counter
@@ -292,8 +292,63 @@ void encrypt(string plainin, string keyin, uint8_t CTR[16]){
 }
 
 void decrypt(string cipherin, string keyin, uint8_t CTR[16]){
+    vector<vector<uint8_t>> key(4, vector<uint8_t>(4));
+
+    size_t numBlocks = cipherin.length() / 32;
+    for (size_t m = 0; m < numBlocks; ++m){
+    string block = cipherin.substr(m * 32, 32); 
+    vector<vector<uint8_t>> ciphertext(4, vector<uint8_t>(4));
+    strtomat(block, ciphertext);
+
+    vector<vector<uint8_t>> CTRmat(4, vector<uint8_t>(4)); //matrix of counter
+    CTRtomat(CTR, CTRmat);
+    strtomat(keyin, key);
+    AddRoundKey(CTRmat,key);
+    for(int i = 1; i < Nr; ++i){ //Number of rounds Nr
+        invShiftRows(CTRmat);
+        invSubBytes(CTRmat);
+        //ADD INV UPDATEKEY!!!!
+        AddRoundKey(CTRmat, key);
+        vector<uint8_t> vec0(4), vec1(4), vec2(4), vec3(4);
+        for(int j = 0; j < 4; ++j){ 
+            vec0[j] = CTRmat[0][j];
+            vec1[j] = CTRmat[1][j];
+            vec2[j] = CTRmat[2][j];
+            vec3[j] = CTRmat[3][j];
+        }
+        invMixColumns(vec0);
+        invMixColumns(vec1);
+        invMixColumns(vec2);
+        invMixColumns(vec3);
+
+        for(int j = 0; j < 4; ++j){ 
+            CTRmat[0][j] = vec0[j] ;
+            CTRmat[1][j] = vec1[j];
+            CTRmat[2][j] = vec2[j];
+            CTRmat[3][j] = vec3[j];
+        }
+    }
+    //last round no invmixcolumns
+    //AGAIN INV UPDATE KEY
+    invShiftRows(CTRmat);
+    invSubBytes(CTRmat);
+    AddRoundKey(CTRmat, key);
+
+    for (int j = 0; j < 4; ++j) {
+            for (int k = 0; k < 4; ++k) {
+                ciphertext[j][k] ^= CTRmat[j][k];
+            }
+        }
+   
+    string plaintext = mattostr(ciphertext);
+    cout << plaintext ;
+
+    incrementCTR(CTR);
+    }
+    cout << " is the ciphertext.";
 
 }
+
 
 int main(){ //define types
 
