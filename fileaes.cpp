@@ -256,13 +256,16 @@ int main(){ //define types
     cout << "Plain Text? " <<endl;
     string plin;
     cin >> plin;
-    ifstream filep(plin);
-    string plainin;
-    filep >> plainin;
+    ifstream filep(plin, ios::binary);
+    vector<char> buffer((istreambuf_iterator<char>(filep)), istreambuf_iterator<char>());
+    string plainbin = string(buffer.begin(), buffer.end());
+    string plainin = 
     plainin.erase(remove_if(plainin.begin(), plainin.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), plainin.end());
     string ciphertext = crypt(plainin, keyin, CTR);
-    ofstream file("encrypted.txt");
-    file << ciphertext;
+    string enin;
+    cin >> enin;
+    ofstream file(enin, ios::binary);
+    file.write(ciphertext.c_str(), ciphertext.size());
     file.close();
     filep.close();
     }
@@ -271,14 +274,16 @@ int main(){ //define types
     cout << "Cipher Text? " <<endl;
     string cipin;
     cin >> cipin;
-    ifstream filec(cipin);
-    string cipherin;
-    filec >> cipherin;
+    ifstream filec(cipin, ios::binary);
+    vector<char> buffer((istreambuf_iterator<char>(filec)), istreambuf_iterator<char>());
+    string cipherin = string(buffer.begin(), buffer.end());
     cipherin.erase(remove_if(cipherin.begin(), cipherin.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), cipherin.end());
     string plaintext = crypt(cipherin, keyin, CTR);
-    ofstream file("decrypted.txt");
-    file << plaintext;
-    file.close();
+    string dein;
+    cin >> dein;
+    ofstream filed(dein, ios::binary);
+    filed.write(plaintext.c_str(), plaintext.size());
+    filed.close();
     filec.close();
     }
 
