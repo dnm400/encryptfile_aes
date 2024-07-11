@@ -178,8 +178,14 @@ string crypt(string textin, string keyin, uint8_t CTR[16]){
 
     vector<vector<uint8_t>> key(4, vector<uint8_t>(4));
     string finaltext;
+    if (textin.length() % 32 != 0) {
+    while (textin.length() % 32 != 0) {
+        textin.append(1, '0');
+    }
+   }
 
     size_t numBlocks = textin.length() / 32;
+    
     for (size_t m = 0; m < numBlocks; ++m) {
     string block = textin.substr(m * 32, 32); 
     vector<vector<uint8_t>> textt(4, vector<uint8_t>(4));
