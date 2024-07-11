@@ -237,6 +237,28 @@ string crypt(string textin, string keyin, uint8_t CTR[16]){
 
 }
 
+
+// Function to convert binary data to hexadecimal string
+string bintohex(const string &bin) {
+    stringstream ss;
+    ss << hex << setfill('0');
+    for (const auto &byte : bin) {
+        ss << setw(2) << static_cast<int>(static_cast<unsigned char>(byte));
+    }
+    return ss.str();
+}
+
+// Function to convert hexadecimal string to binary data
+string hextobin(const string &hex) {
+    string bin;
+    for (size_t i = 0; i < hex.length(); i += 2) {
+        string byte = hex.substr(i, 2);
+        char chr = static_cast<char>(strtol(byte.c_str(), nullptr, 16));
+        bin.push_back(chr);
+    }
+    return bin;
+}
+
 int main(){ //define types
 
     uint8_t IV[12]= {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb}; // 96-bit IV
@@ -259,13 +281,14 @@ int main(){ //define types
     ifstream filep(plin, ios::binary);
     vector<char> buffer((istreambuf_iterator<char>(filep)), istreambuf_iterator<char>());
     string plainbin = string(buffer.begin(), buffer.end());
-    string plainin = 
+    string plainin = bintohex(plainbin);
     plainin.erase(remove_if(plainin.begin(), plainin.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), plainin.end());
     string ciphertext = crypt(plainin, keyin, CTR);
     string enin;
     cin >> enin;
     ofstream file(enin, ios::binary);
-    file.write(ciphertext.c_str(), ciphertext.size());
+    string cipherbin = hextobin(ciphertext);
+    file.write(cipherbin.c_str(), cipherbin.size());
     file.close();
     filep.close();
     }
@@ -276,13 +299,15 @@ int main(){ //define types
     cin >> cipin;
     ifstream filec(cipin, ios::binary);
     vector<char> buffer((istreambuf_iterator<char>(filec)), istreambuf_iterator<char>());
-    string cipherin = string(buffer.begin(), buffer.end());
+    string cipherbin = string(buffer.begin(), buffer.end());
+    string cipherin = bintohex(cipherbin);
     cipherin.erase(remove_if(cipherin.begin(), cipherin.end(), [](char c) { return isspace(static_cast<unsigned char>(c)); }), cipherin.end());
     string plaintext = crypt(cipherin, keyin, CTR);
     string dein;
     cin >> dein;
     ofstream filed(dein, ios::binary);
-    filed.write(plaintext.c_str(), plaintext.size());
+    string plainbin = hextobin(plaintext);
+    filed.write(plainbin.c_str(), plainbin.size());
     filed.close();
     filec.close();
     }
